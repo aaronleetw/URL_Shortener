@@ -43,14 +43,20 @@ def send_email(to, subject, html_content):
         print(e)
 
 
+def check_login_status():
+    return ('is_logged_in' not in session or
+            session['is_logged_in'] == False or
+            (datetime.now(tz) - session['loginTime']).total_seconds() > 3600)
+
+
 @ app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
-        if 'is_logged_in' not in session or session['is_logged_in'] == False:
+        if check_login_status():
             return render_template('login.html', error=False)
         return redirect('/manage')
     elif request.method == 'POST':
-        if 'is_logged_in' not in session or session['is_logged_in'] == False:
+        if check_login_status():
             try:
                 user = auth.sign_in_with_email_and_password(
                     request.form['email'], request.form['password'])
@@ -58,6 +64,7 @@ def index():
                 session['email'] = user['email']
                 session['uid'] = user['localId']
                 session['token'] = user['idToken']
+                session['loginTime'] = datetime.now(tz)
                 return redirect('/manage')
             except Exception as e:
                 return render_template('login.html', error=True)
@@ -67,8 +74,8 @@ def index():
 
 @ app.route('/manage', methods=['GET'])
 def manage():
-    if 'is_logged_in' not in session or session['is_logged_in'] == False:
-        return redirect('/')
+    if check_login_status():
+        return redirect('/manage/logout')
     else:
         data = db.child("URLs").get(session['token']).val()
         if data is None:
@@ -78,8 +85,8 @@ def manage():
 
 @ app.route('/manage/create', methods=['GET', 'POST'])
 def create():
-    if 'is_logged_in' not in session or session['is_logged_in'] == False:
-        return redirect('/')
+    if check_login_status():
+        return redirect('/manage/logout')
     else:
         if request.method == 'GET':
             return redirect('/manage')
@@ -95,8 +102,8 @@ def create():
 
 @ app.route('/manage/bulk', methods=['GET', 'POST'])
 def bulk():
-    if 'is_logged_in' not in session or session['is_logged_in'] == False:
-        return redirect('/')
+    if check_login_status():
+        return redirect('/manage/logout')
     else:
         if request.method == 'GET':
             data = db.child("URLs").get(session['token']).val()
@@ -115,8 +122,8 @@ def bulk():
 
 @ app.route('/manage/edit/<short>', methods=['GET', 'POST'])
 def edit(short):
-    if 'is_logged_in' not in session or session['is_logged_in'] == False:
-        return redirect('/')
+    if check_login_status():
+        return redirect('/manage/logout')
     else:
         if request.method == 'GET':
             data = db.child("URLs").child(short).get().val()
@@ -131,8 +138,8 @@ def edit(short):
 
 @ app.route('/manage/delete/<short>', methods=['GET'])
 def delete(short):
-    if 'is_logged_in' not in session or session['is_logged_in'] == False:
-        return redirect('/')
+    if check_login_status():
+        return redirect('/manage/logout')
     else:
         db.child("URLs").child(short).remove(session['token'])
         return redirect('/manage')
