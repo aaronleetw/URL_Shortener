@@ -13,10 +13,31 @@
     <div class="container">
         <h1>Aaron's URL Shortener</h1>
         <h3>Admin Panel</h3>
-        <a href="/manage/create"><button class="btn btn-primary">Create New</button></a>
-        <a href="/manage/bulk"><button class="btn btn-secondary">Bulk Edit</button></a>
-        <a href="/manage/logout"><button class="btn btn-primary">Log Out</button></a>
-        <div class="col border align-items-center manage">
+        <form action="/manage/create" method="POST">
+            <div class="row downmargin-mini">
+                <div class="col"></div>
+                <div class="col"> <input required type="text" class="form-control" id="short" name="short"
+                        placeholder="Short URL">
+                </div>
+                <div class="col"> <input required type="url" class="form-control" id="url" name="url" placeholder="URL">
+                </div>
+                <div class="col"></div>
+            </div>
+            <button class="btn btn-primary">Create New Link</button>
+            <a href="/manage/bulk"><button type="button" class="btn btn-secondary">Bulk Edit</button></a>
+            <a href="/manage/logout"><button type="button" class="btn btn-primary">Log Out</button></a>
+        </form>
+        <div class="row upmargin downmargin-mini">
+            <div class="col">
+                <input type="text" class="form-control" id="searchInput0" onkeyup="searchInTable(0,'manage')"
+                    placeholder="Search Short URL">
+            </div>
+            <div class="col"><input type="text" class="form-control" id="searchInput1"
+                    onkeyup="searchInTable(1, 'manage')" placeholder="Search URL"></div>
+            <div class="col"></div>
+            <div class="col col-2"></div>
+        </div>
+        <div class="col border align-items-center" id="table">
             <div class="row">
                 <div class="col">Short URL</div>
                 <div class="col">URL</div>
@@ -24,7 +45,7 @@
                 <div class="col col-2">Action</div>
             </div>
             {% for i in data %}
-            <div class="row">
+            <div class="row overflow-wordwrap">
                 <div class="col">{{ i }}</div>
                 <div class="col">{{data[i]['url']}}</div>
                 <div class="col">{{data[i]['created']}}</div>
@@ -43,6 +64,7 @@
             </div>
             {% endfor %}
         </div>
+        <script src="/static/searchTable.js"></script>
 </body>
 
 </html>

@@ -13,6 +13,16 @@
     <div class="container">
         <h1>Aaron's URL Shortener</h1>
         <h3>Bulk Edit</h3>
+        <div class="row upmargin downmargin-mini">
+            <div class="col">
+                <input type="text" class="form-control" id="searchInput0" onkeyup="searchInTable(0, 'bulk')"
+                    placeholder="Search Short URL">
+            </div>
+            <div class="col"><input type="text" class="form-control" id="searchInput1"
+                    onkeyup="searchInTable(1, 'bulk')" placeholder="Search URL"></div>
+            <div class="col"></div>
+            <div class="col col-2"></div>
+        </div>
         <div class="col border align-items-center manage">
             <div class="row">
                 <div class="col">Short URL</div>
@@ -20,7 +30,7 @@
                 <div class="col">Last Edited</div>
                 <div class="col col-2">Action</div>
             </div>
-            <form action="/manage/bulk" method="POST">
+            <form action="/manage/bulk" method="POST" id="table">
                 {% for i in data %}
                 <div class="row">
                     <div class="col">
@@ -43,6 +53,7 @@
                 <button type="submit" class="upmargin btn btn-primary">Submit</button>
             </form>
         </div>
+        <script src="/static/searchTable.js"></script>
 </body>
 
 </html>

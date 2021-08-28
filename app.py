@@ -82,7 +82,7 @@ def create():
         return redirect('/')
     else:
         if request.method == 'GET':
-            return render_template('create.html', edit=False, error=False)
+            return redirect('/manage')
         else:
             if db.child("URLs").child(request.form['short']).get().val() is not None:
                 return render_template('create.html', edit=False, error=True)

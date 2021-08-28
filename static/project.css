@@ -44,14 +44,23 @@ div.border .col {
     border: 1px solid black;
 }
 
-div.manage {
+.upmargin {
     margin-top: 20px;
 }
 
-button.upmargin {
-    margin-top: 20px;
+.downmargin {
+    margin-bottom: 20px;
+}
+
+.downmargin-mini {
+    margin-bottom: 10px;
 }
 
 h3 {
     margin-bottom: 30px;
+}
+
+div.row.overflow-wordwrap div.col {
+    overflow: auto;
+    word-wrap: break-word;
 }
