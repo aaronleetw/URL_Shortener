@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <title>Aaron's URL Shortener</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/project.css">
+    <script src="https://kit.fontawesome.com/52a3d6c810.js" crossorigin="anonymous"></script>
+    <link rel="shortcut icon" href="/static/favicon.ico" />
+</head>
+
+<body>
+    <div class="container">
+        <h1>Aaron's URL Shortener</h1>
+        <h3>Admin Panel</h3>
+        <a href="/manage/create"><button class="btn btn-primary">Create New</button></a>
+        <a href="/manage/bulk"><button class="btn btn-secondary">Bulk Edit</button></a>
+        <a href="/manage/logout"><button class="btn btn-primary">Log Out</button></a>
+        <div class="col border align-items-center manage">
+            <div class="row">
+                <div class="col">Short URL</div>
+                <div class="col">URL</div>
+                <div class="col">Last Edited</div>
+                <div class="col col-2">Action</div>
+            </div>
+            {% for i in data %}
+            <div class="row">
+                <div class="col">{{ i }}</div>
+                <div class="col">{{data[i]['url']}}</div>
+                <div class="col">{{data[i]['created']}}</div>
+                <div class="col col-2">
+                    <a href="/manage/edit/{{ i }}">
+                        <button class="btn btn-primary">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                    </a>
+                    <a href="/manage/delete/{{ i }}">
+                        <button class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+</body>
+
+</html>
