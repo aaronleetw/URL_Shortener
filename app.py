@@ -64,6 +64,7 @@ def index():
                 session['email'] = user['email']
                 session['uid'] = user['localId']
                 session['token'] = user['idToken']
+                session['refreshToken'] = user['refreshToken']
                 session['loginTime'] = datetime.now(tz)
                 return redirect('/manage')
             except Exception as e:
@@ -77,6 +78,10 @@ def manage():
     if check_login_status():
         return redirect('/manage/logout')
     else:
+        user = auth.refresh(session['refreshToken'])
+        session['loginTime'] = datetime.now(tz)
+        session['refreshToken'] = user['refreshToken']
+        session['token'] = user['idToken']
         data = db.child("URLs").get(session['token']).val()
         if data is None:
             return render_template('manage.html', data={})
@@ -88,6 +93,10 @@ def create():
     if check_login_status():
         return redirect('/manage/logout')
     else:
+        user = auth.refresh(session['refreshToken'])
+        session['loginTime'] = datetime.now(tz)
+        session['refreshToken'] = user['refreshToken']
+        session['token'] = user['idToken']
         if request.method == 'GET':
             return redirect('/manage')
         else:
@@ -105,6 +114,10 @@ def bulk():
     if check_login_status():
         return redirect('/manage/logout')
     else:
+        user = auth.refresh(session['refreshToken'])
+        session['loginTime'] = datetime.now(tz)
+        session['refreshToken'] = user['refreshToken']
+        session['token'] = user['idToken']
         if request.method == 'GET':
             data = db.child("URLs").get(session['token']).val()
             if data is None:
@@ -125,6 +138,10 @@ def edit(short):
     if check_login_status():
         return redirect('/manage/logout')
     else:
+        user = auth.refresh(session['refreshToken'])
+        session['loginTime'] = datetime.now(tz)
+        session['refreshToken'] = user['refreshToken']
+        session['token'] = user['idToken']
         if request.method == 'GET':
             data = db.child("URLs").child(short).get().val()
             return render_template('create.html', edit=True, short=short, url=data['url'])
@@ -141,6 +158,10 @@ def delete(short):
     if check_login_status():
         return redirect('/manage/logout')
     else:
+        user = auth.refresh(session['refreshToken'])
+        session['loginTime'] = datetime.now(tz)
+        session['refreshToken'] = user['refreshToken']
+        session['token'] = user['idToken']
         db.child("URLs").child(short).remove(session['token'])
         return redirect('/manage')
 
